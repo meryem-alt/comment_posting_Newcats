@@ -2,8 +2,11 @@ name: Auto Post Stories & Comments
 
 on:
   schedule:
-    - cron: '30 */2 * * *'   # كل ساعة
+    - cron: '30 */2 * * *'   # كل 2 ساعات
   workflow_dispatch:
+
+permissions:
+  contents: write   # ⚡ مهمّة باش GitHub Actions يقدر يدير push
 
 jobs:
   autopost:
@@ -13,6 +16,8 @@ jobs:
       # 1️⃣ Checkout repository
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}   # ضرورية باش push ينجح
 
       # 2️⃣ Setup Python
       - name: Setup Python
@@ -40,4 +45,4 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add status.json || echo "No file to add"
           git commit -m "Update status.json" || echo "No changes"
-          git push
+          git push origin main
